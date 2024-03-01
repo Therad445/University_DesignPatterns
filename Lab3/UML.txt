@@ -1,0 +1,71 @@
+UML-диаграмма классов:
+
++-------------------------+
+|         Passenger       |
++-------------------------+
+| - baggageWeight: int    |
+| + getBaggageWeight(): int |
++-------------------------+
+             |
+             |
+      +------+-------+
+      |              |
++-----------+   +--------------+
+|   Pilot   |   |  Stewardess  |
++-----------+   +--------------+
+|             |   |              |
++-----------+   +--------------+
+             |
+             |
++-----------------------------+
+|          FlightClass        |
++-----------------------------+
+| - maxPassengers: int        |
+| - baggageLimit: int         |
+| + addPassenger(Passenger): void |
+| + checkBaggage(): void      |
++-----------------------------+
+      /       |         \
+     /        |          \
++------+   +--------+   +---------+
+| First|   | Business|   | Economy |
++------+   +--------+   +---------+
+
+
+UML-диаграмма последовательности:
+
+
+Participant: Passenger
+Participant: Pilot
+Participant: Stewardess
+Participant: FirstClass
+Participant: BusinessClass
+Participant: EconomyClass
+Participant: FlightControl
+
+Pilot -> FlightControl: Check readiness for departure
+Stewardess -> FlightControl: Check readiness for departure
+FirstClass -> FlightControl: Check readiness for departure
+BusinessClass -> FlightControl: Check readiness for departure
+EconomyClass -> FlightControl: Check readiness for departure
+
+FlightControl -> FirstClass: Check baggage weight
+FirstClass -> Passenger: Get baggage weight
+FirstClass -> Passenger: Check if baggage exceeds limit
+FirstClass -> FlightControl: Report excess baggage
+
+FlightControl -> BusinessClass: Check baggage weight
+BusinessClass -> Passenger: Get baggage weight
+BusinessClass -> Passenger: Check if baggage exceeds limit
+BusinessClass -> FlightControl: Report excess baggage
+
+FlightControl -> EconomyClass: Check baggage weight
+EconomyClass -> Passenger: Get baggage weight
+EconomyClass -> Passenger: Check if baggage exceeds limit
+EconomyClass -> FlightControl: Report excess baggage
+
+FlightControl -> Pilot: Ready for departure
+FlightControl -> Stewardess: Ready for departure
+FlightControl -> FirstClass: Ready for departure
+FlightControl -> BusinessClass: Ready for departure
+FlightControl -> EconomyClass: Ready for departure

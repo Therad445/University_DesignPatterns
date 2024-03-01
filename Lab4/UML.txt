@@ -1,0 +1,43 @@
+UML-диаграмма классов:
+
++------------------------+         +-------------------+         +----------------------+
+|       Graphic         |         |     ImageProxy    |         |       RealImage       |
++------------------------+         +-------------------+         +----------------------+
+| + draw(): void        |         | - filename: string|         | - filename: string    |
+| + move(x, y): void    |         | - image: RealImage|         | + loadImage(): void   |
++------------------------+         +-------------------+         +----------------------+
+                |                           |                           |
+                |                           |                           |
+        +-------+--------+          +-------+--------+          +-------+--------+
+        |                |          |                |          |                |
++----------------+  +----------------+  +----------------+  +----------------+
+|      Box       |  |   Mouse        |  |   TestImage    |  |   ImageLoader  |
++----------------+  +----------------+  +----------------+  +----------------+
+| - width: int   |  |                |  |                |  |                |
+| - height: int  |  | - click(): void|  |                |  |                |
++----------------+  +----------------+  +----------------+  +----------------+
+
+
+UML-диаграмма последовательности:
+
+Participant: Graphic
+Participant: ImageProxy
+Participant: RealImage
+Participant: Box
+Participant: Mouse
+Participant: TestImage
+Participant: ImageLoader
+
+Mouse -> Box: move(x, y)
+Box -> Graphic: draw()
+
+Mouse -> Mouse: click()
+alt click()
+    Mouse -> ImageProxy: loadImage()
+    ImageProxy -> RealImage: loadImage()
+else move()
+    Mouse -> Box: move(x, y)
+    Box -> Graphic: draw()
+end
+
+
