@@ -20,37 +20,85 @@ Driver* Driver::instance = nullptr;
 
 // Abstract Factory pattern implementation
 class BoardAnyCar {
+protected:
+    bool driverBoarded;
+    int passengerCount;
+    int maxPassengerCount;
+
 public:
+    BoardAnyCar(int maxPassCount) : driverBoarded(false), passengerCount(0), maxPassengerCount(maxPassCount) {}
+
     virtual void boardDriver() = 0;
-    virtual void boardPassengers() = 0;
+    virtual void boardPassenger() = 0;
+    virtual void start() = 0;
     virtual ~BoardAnyCar() {}
 };
 
 class BoardTaxi : public BoardAnyCar {
 public:
+    BoardTaxi() : BoardAnyCar(4) {}
+
     void boardDriver() override {
-        Driver* driver = Driver::getInstance();
-        // Boarding taxi driver logic
-        std::cout << "Taxi driver boarded.\n";
+        if (!driverBoarded) {
+            Driver* driver = Driver::getInstance();
+            // Boarding taxi driver logic
+            std::cout << "Taxi driver boarded.\n";
+            driverBoarded = true;
+        } else {
+            std::cout << "Taxi already has a driver.\n";
+        }
     }
 
-    void boardPassengers() override {
-        // Boarding taxi passengers logic
-        std::cout << "Passengers boarded taxi.\n";
+    void boardPassenger() override {
+        if (passengerCount < maxPassengerCount) {
+            // Boarding taxi passenger logic
+            std::cout << "Passenger boarded taxi.\n";
+            ++passengerCount;
+        } else {
+            std::cout << "Taxi is full. Cannot board more passengers.\n";
+        }
+    }
+
+    void start() override {
+        if (driverBoarded && passengerCount > 0) {
+            std::cout << "Taxi is ready to depart.\n";
+        } else {
+            std::cout << "Taxi is not ready to depart. Board driver and passengers first.\n";
+        }
     }
 };
 
 class BoardBus : public BoardAnyCar {
 public:
+    BoardBus() : BoardAnyCar(30) {}
+
     void boardDriver() override {
-        Driver* driver = Driver::getInstance();
-        // Boarding bus driver logic
-        std::cout << "Bus driver boarded.\n";
+        if (!driverBoarded) {
+            Driver* driver = Driver::getInstance();
+            // Boarding bus driver logic
+            std::cout << "Bus driver boarded.\n";
+            driverBoarded = true;
+        } else {
+            std::cout << "Bus already has a driver.\n";
+        }
     }
 
-    void boardPassengers() override {
-        // Boarding bus passengers logic
-        std::cout << "Passengers boarded bus.\n";
+    void boardPassenger() override {
+        if (passengerCount < maxPassengerCount) {
+            // Boarding bus passenger logic
+            std::cout << "Passenger boarded bus.\n";
+            ++passengerCount;
+        } else {
+            std::cout << "Bus is full. Cannot board more passengers.\n";
+        }
+    }
+
+    void start() override {
+        if (driverBoarded && passengerCount > 0) {
+            std::cout << "Bus is ready to depart.\n";
+        } else {
+            std::cout << "Bus is not ready to depart. Board driver and passengers first.\n";
+        }
     }
 };
 
@@ -75,16 +123,25 @@ public:
     }
 };
 
+// Client code
 int main() {
     CarBoardFactory* taxiFactory = new TaxiBoardFactory();
     BoardAnyCar* taxiBoard = taxiFactory->createCarBoard();
     taxiBoard->boardDriver();
-    taxiBoard->boardPassengers();
+    taxiBoard->boardPassenger();
+    taxiBoard->start();
 
     CarBoardFactory* busFactory = new BusBoardFactory();
     BoardAnyCar* busBoard = busFactory->createCarBoard();
     busBoard->boardDriver();
-    busBoard->boardPassengers();
+    busBoard->boardPassenger();
+    busBoard->start();
+
+    // Trying to board more passengers than the limit
+    for (int i = 0; i < 30; ++i) {
+        busBoard->boardPassenger();
+    }
+    busBoard->start();
 
     delete taxiFactory;
     delete taxiBoard;
