@@ -70,7 +70,7 @@ public:
 // Concrete builder for Taxi
 class TaxiBuilder : public CarBuilder {
 private:
-    Passenger passenger;
+    std::vector<Passenger> passengers;
     bool hasDriver;
     bool hasChildSeat;
 
@@ -82,9 +82,9 @@ public:
         std::cout << "Taxi driver boarded.\n";
     }
 
-    void buildPassenger(Passenger pass) override {
+    void buildPassenger(Passenger passenger) override {
         if (passengers.size() < 4) {
-            passenger = pass;
+            passengers.push_back(passenger);
             std::cout << "Passenger boarded taxi.\n";
         } else {
             std::cout << "Taxi is full. Cannot board more passengers.\n";
@@ -100,7 +100,7 @@ public:
 
     Car* getResult() override {
         // Construct and return Taxi object
-        return new Taxi(passenger, hasDriver, hasChildSeat);
+        return new Taxi(passengers, hasDriver, hasChildSeat);
     }
 };
 
@@ -158,13 +158,13 @@ public:
 // Concrete implementation of Taxi
 class Taxi : public Car {
 private:
-    Passenger passenger;
+    std::vector<Passenger> passengers;
     bool hasDriver;
     bool hasChildSeat;
 
 public:
-    Taxi(Passenger pass, bool driver, bool childSeat)
-        : passenger(pass), hasDriver(driver), hasChildSeat(childSeat) {}
+    Taxi(std::vector<Passenger> pass, bool driver, bool childSeat)
+        : passengers(pass), hasDriver(driver), hasChildSeat(childSeat) {}
 
     void boardDriver() override {
         if (!hasDriver) {
@@ -175,9 +175,9 @@ public:
         }
     }
 
-    void boardPassenger(Passenger pass) override {
+    void boardPassenger(Passenger passenger) override {
         if (passengers.size() < 4) {
-            passenger = pass;
+            passengers.push_back(passenger);
             std::cout << "Passenger boarded taxi.\n";
         } else {
             std::cout << "Taxi is full. Cannot board more passengers.\n";
@@ -185,7 +185,7 @@ public:
     }
 
     void start() override {
-        if (hasDriver) {
+        if (hasDriver && passengers.size() > 0) {
             std::cout << "Taxi is ready to depart.\n";
         } else {
             std::cout << "Taxi is not ready to depart. Board driver first.\n";
