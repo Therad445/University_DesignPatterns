@@ -4,3 +4,10 @@
 
 /.vs
 /.vscode
+/Lab1/Debug
+/Lab1/.vs/Lab1
+/Singleton/.vs/Singleton
+/Singleton/Debug
+/Singleton/x64/Debug
+/AbstractFactory/.vs/AbstractFactory
+/AbstractFactory/x64/Debug
