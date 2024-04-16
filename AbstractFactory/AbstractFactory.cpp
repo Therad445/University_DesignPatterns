@@ -55,7 +55,7 @@ protected:
 
 public:
     BoardAnyCar(int maxPassCount) : driverBoarded(false), passengerCount(0), maxPassengerCount(maxPassCount) {}
-    virtual Driver* boardDriver(Driver* driver) = 0;
+    virtual Driver* boardDriver(string license) = 0;
     virtual Passenger* boardPassenger() = 0;
     virtual void start() = 0;
     virtual ~BoardAnyCar() {};
@@ -66,23 +66,22 @@ class BoardBus : public BoardAnyCar
 {
 public:
     BoardBus() : BoardAnyCar(30) {}
-    Driver* boardDriver(Driver* driver) override {
-        if (!driverBoarded) {
-            if (driver->license_type() == "D")
-            {
-                driverBoarded = true;
-                std::cout << "Bus driver boarded.\n";
-                return new BusDriver;
-            }
-            else
-            {
-                std::cout << "Wrong license.\n";
-            }
+    Driver* boardDriver(string license) override {
+        if (!driverBoarded && license == "D")
+        {
+            driverBoarded = true;
+            std::cout << "Bus driver boarded.\n";
+            return new BusDriver;
         }
-        else
+        else if (driverBoarded)
         {
             std::cout << "Bus driver has already boarded.\n";
         }
+        else
+        {
+            std::cout << "Wrong license.\n";
+        }
+        return nullptr;
     }
     Passenger* boardPassenger() {
         if (passengerCount < maxPassengerCount) {
@@ -93,6 +92,7 @@ public:
         else
         {
             std::cout << "Bus is full. Cannot board more passengers.\n";
+            return nullptr;
         }
 
     }
@@ -111,23 +111,22 @@ class BoardTaxi : public BoardAnyCar
 {
 public:
     BoardTaxi() : BoardAnyCar(4) {}
-    Driver* boardDriver(Driver* driver) override {
-        if (!driverBoarded) {
-            if (driver->license_type() == "B")
-            {
-                driverBoarded = true;
-                std::cout << "Taxi driver boarded.\n";
-                return new BusDriver;
-            }
-            else
-            {
-                std::cout << "Wrong license.\n";
-            }
+    Driver* boardDriver(string license) override {
+        if (!driverBoarded && license == "B")
+        {
+            driverBoarded = true;
+            std::cout << "Taxi driver boarded.\n";
+            return new TaxiDriver;
         }
-        else
+        else if (driverBoarded)
         {
             std::cout << "Taxi driver has already boarded.\n";
         }
+        else
+        {
+            std::cout << "Wrong license.\n";
+        }
+        return nullptr;
     }
     Passenger* boardPassenger() {
         if (passengerCount < maxPassengerCount) {
@@ -138,6 +137,7 @@ public:
         else
         {
             std::cout << "Taxi is full. Cannot board more passengers.\n";
+            return nullptr;
         }
     }
     void start() override {
@@ -157,18 +157,18 @@ int main() {
 
     std::cout << "Taxi test:\n";
     BoardAnyCar* taxiBoard = new BoardTaxi();
-    taxiBoard->boardDriver(busDriver);
-    taxiBoard->boardDriver(taxiDriver);
+    taxiBoard->boardDriver(busDriver->license_type());
+    taxiBoard->boardDriver(taxiDriver->license_type());
     for (size_t i = 0; i < 5; i++)
     {
         taxiBoard->boardPassenger();
     }
     taxiBoard->start();
 
-    std::cout << "\n\Bus test:\n";
+    std::cout << "\nBus test:\n";
     BoardAnyCar* busBoard = new BoardBus();
-    busBoard->boardDriver(taxiDriver);
-    busBoard->boardDriver(busDriver);
+    busBoard->boardDriver(taxiDriver->license_type());
+    busBoard->boardDriver(busDriver->license_type());
     for (size_t i = 0; i < 31; i++)
     {
         busBoard->boardPassenger();
