@@ -1,6 +1,4 @@
-# UnversityEducation_SoftwareArchitecture
-
-# Design Patterns
+# Unversity_DesignPatterns
 My practice in developing Design Patterns from the "Gang of Four" book "Pattern Design: Elements of Reusable Object-Oriented Software" 
 
 # Plan: 
