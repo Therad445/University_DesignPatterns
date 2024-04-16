@@ -27,5 +27,5 @@ My practice in developing Design Patterns from the "Gang of Four" book "Pattern 
 
 # Resourses
 * "Pattern Design: Elements of Reusable Object-Oriented Software" by Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides "Gang of Four"
-* [a relative link](MIET_Labs1-6.pdf)
-* [a relative link](README.md)
+* [MIET_Labs1-6.pdf](MIET_Labs1-6.pdf)
+* [README.md](README.md)
