@@ -1,0 +1,15 @@
++----------------+        +------------------+        +---------------------+        +----------------+
+|    Director    | -----> | VehicleBuilder   | -----> | ConcreteVehicleBuilder | -----> |      Vehicle   |
++----------------+        +------------------+        +---------------------+        +----------------+
+| - createVehicle|        | - createDriver() |        | - createDriver()     |        | - addDriver()  |
++----------------+        | - createPassenger|        | - createPassenger()  |        | - addPassenger()|
+                          | - getVehicle()   |        | - getVehicle()       |        | - isReadyToDepart()|
+                          +------------------+        +---------------------+        +----------------+
+                                        ▲                                 ▲
+                                        |                                 |
+                          +------------------------+            +----------------------------+
+                          |      Vehicle            |            |     ConcreteVehicle       |
+                          +------------------------+            +----------------------------+
+                          | - driver: Driver*      |            | - driver: Driver*          |
+                          | - passengers: vector<Passenger*> |   | - passengers: vector<Passenger*> |
+                          +------------------------+            +----------------------------+
