@@ -6,16 +6,20 @@
 class Stewardess
 {
 public:
-	Stewardess();
-	~Stewardess();
+	void board() {
+		std::cout << "Stewardess boarded";
+	};
+	~Stewardess() {};
 };
 
 
 class Pilot
 {
 public:
-	Pilot();
-	~Pilot();
+	void board() {
+		std::cout << "Pilot boarded";
+	};
+	~Pilot() {};
 };
 
 
@@ -142,41 +146,54 @@ public:
 
 
 // Composite
-class CompositePassenger : public Passenger
+class CompositePassenger : public Passenger, public Pilot, public Stewardess
 {
 private:
-	std::vector<Passenger*> c;
+	std::vector<Passenger*> pas;
+	std::vector<Pilot*> pil;
+	std::vector<Stewardess*> stew;
 public:
 	void setWeight(int input_weight) override {};
 	int getWeight() override {
 		int total = 0;
-		for (int i = 0; i < c.size(); i++)
-			total += c[i]->getWeight();
+		for (int i = 0; i < pas.size(); i++)
+			total += pas[i]->getWeight();
 		return total;
 	}
-	void addPassenger(Passenger* p) override {
-		c.push_back(p);
+	void addPassenger(Passenger* pa) override {
+		pas.push_back(pa);
+	}
+	void addPilot(Pilot* pi) {
+		pil.push_back(pi);
+	}
+	void addStewardess(Stewardess* st) {
+		stew.push_back(st);
 	}
 
-	//bool removeOnePaidEconomyPassenger() {
-	//	for (auto it = c.begin(); it != c.end(); ++it) {
-	//		EconomyClass* ec = dynamic_cast<EconomyClass*>(*it);
-	//		if (ec && ec->isPaid()) {
-	//			delete ec;  // Удаление объекта
-	//			c.erase(it);  // Удаление указателя из вектора
-	//			return true;  // Возвращает true, если удаление произошло
-	//		}
-	//	}
-	//	return false;  // Нет больше эконом-класс пассажиров с платным багажом для удаления
-	//}
 
-	void unloadedOnePaidEconomyPassenger(int max_weight) {
-		for (auto it = c.begin(); it != c.end(); ++it) {
+	void unloadPaidEconomyPassenger(int max_weight) {
+		for (auto it = pas.begin(); it != pas.end(); ++it) {
 			EconomyClass* ec = dynamic_cast<EconomyClass*>(*it);
 			if (ec && ec->isPaid()) {
 				ec->unloadBaggage();  // Change flag
 				if (getWeight() <= max_weight) break;
 			}
+			if (it == pas.end() - 1 && getWeight() > max_weight) {
+				std::cout << "Unfortunetly, but this airplane is still overweight. Please, change the limit or remove some passengers." << std::endl;
+				break;
+			}
+		}
+	}
+
+	void isReady() {
+		if (pil.size() == 2 && stew.size() == 6 && pas.size() != 0)
+		{
+			std::cout << "Airplane is ready.\n";
+		}
+		else
+		{
+			std::cout << "Airplane is NOT ready.\n";
+			//std::cin >> NULL;
 		}
 	}
 
@@ -185,8 +202,8 @@ public:
 		return false;
 	}
 	~CompositePassenger() {
-		for (int i = 0; i < c.size(); i++)
-			delete c[i];
+		for (int i = 0; i < pas.size(); i++)
+			delete pas[i];
 	}
 };
 
@@ -217,15 +234,26 @@ CompositePassenger* createAirplane(int max_weight)
 		airplane->addPassenger(ec);
 		std::cout << "Added EconomyClass passenger with 30kg baggage" << std::endl;
 	}
+	// 2 Pilot
+	for (size_t i = 0; i < 2; i++)
+	{
+		Pilot* pi = new Pilot;
+		airplane->addPilot(pi);
+	}
+	// 6 Stewardess
+	for (size_t i = 0; i < 6; i++)
+	{
+		Stewardess* st = new Stewardess;
+		airplane->addStewardess(st);
+	}
+	airplane->isReady();
 	std::cout << "Total baggage weight is " << airplane->getWeight() << std::endl;
 	if (airplane->getWeight() > max_weight)
 	{
 		std::cout << "Overweight  baggages weight! Limit is " << max_weight << std::endl;
 	}
-	while (airplane->getWeight() > max_weight) {
-		//airplane->removeOnePaidEconomyPassenger();  // Delete 
-		airplane->unloadedOnePaidEconomyPassenger(max_weight);
-		if (airplane->getWeight() <= max_weight) break;
+	if (airplane->getWeight() > max_weight) {
+		airplane->unloadPaidEconomyPassenger(max_weight);
 	}
 	std::cout << "After unload, total baggage weight is " << airplane->getWeight() << std::endl;
 	return airplane;
@@ -234,7 +262,7 @@ CompositePassenger* createAirplane(int max_weight)
 int main()
 {
 	CompositePassenger* airplane = new CompositePassenger;
-	airplane->addPassenger(createAirplane(5500));
+	airplane->addPassenger(createAirplane(1100));
 	delete airplane;
     return 0;
 }
