@@ -146,7 +146,7 @@ public:
 
 
 // Composite
-class CompositePassenger : public Passenger, public Pilot, public Stewardess
+class Composite : public Passenger, public Pilot, public Stewardess
 {
 private:
 	std::vector<Passenger*> pas;
@@ -201,15 +201,15 @@ public:
 	bool isPaid() override {
 		return false;
 	}
-	~CompositePassenger() {
+	~Composite() {
 		for (int i = 0; i < pas.size(); i++)
 			delete pas[i];
 	}
 };
 
-CompositePassenger* createAirplane(int max_weight)
+Composite* createAirplane(int max_weight)
 {
-	CompositePassenger* airplane = new CompositePassenger;
+	Composite* airplane = new Composite;
 	// 10 FirstClass Passsengers
 	for (int i = 0; i < 10; i++)
 	{
@@ -261,7 +261,7 @@ CompositePassenger* createAirplane(int max_weight)
 
 int main()
 {
-	CompositePassenger* airplane = new CompositePassenger;
+	Composite* airplane = new Composite;
 	airplane->addPassenger(createAirplane(1100));
 	delete airplane;
     return 0;
