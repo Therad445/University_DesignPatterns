@@ -1,0 +1,16 @@
+C:\Users\user\source\repos\UnversityEducation_SoftwareArchitecture\Proxy\obj\Debug\net6.0-windows\Proxy.Form1.resources
+C:\Users\user\source\repos\UnversityEducation_SoftwareArchitecture\Proxy\obj\Debug\net6.0-windows\Proxy.csproj.GenerateResource.cache
+C:\Users\user\source\repos\UnversityEducation_SoftwareArchitecture\Proxy\obj\Debug\net6.0-windows\Proxy.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\source\repos\UnversityEducation_SoftwareArchitecture\Proxy\obj\Debug\net6.0-windows\Proxy.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\UnversityEducation_SoftwareArchitecture\Proxy\obj\Debug\net6.0-windows\Proxy.AssemblyInfo.cs
+C:\Users\user\source\repos\UnversityEducation_SoftwareArchitecture\Proxy\obj\Debug\net6.0-windows\Proxy.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\UnversityEducation_SoftwareArchitecture\Proxy\bin\Debug\net6.0-windows\Proxy.exe
+C:\Users\user\source\repos\UnversityEducation_SoftwareArchitecture\Proxy\bin\Debug\net6.0-windows\Proxy.deps.json
+C:\Users\user\source\repos\UnversityEducation_SoftwareArchitecture\Proxy\bin\Debug\net6.0-windows\Proxy.runtimeconfig.json
+C:\Users\user\source\repos\UnversityEducation_SoftwareArchitecture\Proxy\bin\Debug\net6.0-windows\Proxy.dll
+C:\Users\user\source\repos\UnversityEducation_SoftwareArchitecture\Proxy\bin\Debug\net6.0-windows\Proxy.pdb
+C:\Users\user\source\repos\UnversityEducation_SoftwareArchitecture\Proxy\obj\Debug\net6.0-windows\Proxy.dll
+C:\Users\user\source\repos\UnversityEducation_SoftwareArchitecture\Proxy\obj\Debug\net6.0-windows\refint\Proxy.dll
+C:\Users\user\source\repos\UnversityEducation_SoftwareArchitecture\Proxy\obj\Debug\net6.0-windows\Proxy.pdb
+C:\Users\user\source\repos\UnversityEducation_SoftwareArchitecture\Proxy\obj\Debug\net6.0-windows\Proxy.genruntimeconfig.cache
+C:\Users\user\source\repos\UnversityEducation_SoftwareArchitecture\Proxy\obj\Debug\net6.0-windows\ref\Proxy.dll
