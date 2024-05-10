@@ -95,3 +95,24 @@ int main() {
 
     return 0;
 }
+
+//------------------------       ---------------------- -
+//| Subject         |     |        Observer |
+//------------------------       ---------------------- -
+//|                        |     |                       |
+//------------------------       ---------------------- -
+//| +attach(observer: Observer*) | | +update(reportCreated: bool) |
+//| +detach(observer: Observer*) | |
+//| +notify()             |     |                       |
+//------------------------       ---------------------- -
+//|                           |
+//|                           |
+//------------------                |
+//|   Department    |               |
+//------------------                |
+//| -observers: vector<Observer*>  |
+//| -isReportCreated : bool |
+//------------------                |
+//| +createReport()                |
+//| +isReportAvailable() : bool |
+//------------------ |
