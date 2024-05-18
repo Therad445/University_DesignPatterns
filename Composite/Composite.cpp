@@ -146,7 +146,7 @@ public:
 
 
 // Composite
-class Composite : public Passenger, public Pilot, public Stewardess
+class Composite : public Passenger
 {
 private:
 	std::vector<Passenger*> pas;
@@ -266,3 +266,7 @@ int main()
 	delete airplane;
     return 0;
 }
+
+
+// От unit наследовать все классы (Passenger, Stawedess, BusinessClass и другие)
+// Несколько Composite для реализации

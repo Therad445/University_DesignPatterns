@@ -1,159 +1,257 @@
 ﻿#include <iostream>
 #include <vector>
-using namespace std;
+#include <random>
+
+enum class PassengerType {
+    Adult,
+    Child,
+    Discount
+};
+
+enum class LicenseType {
+    Bus,
+    Taxi
+};
 
 
-// Class BusPassenger 
-class BusPassenger
+PassengerType getPassengerTypeFromString(const std::string& typeString) {
+    if (typeString == "Adult") {
+        return PassengerType::Adult;
+    }
+    else if (typeString == "Child") {
+        return PassengerType::Child;
+    }
+    else if (typeString == "Discount") {
+        return PassengerType::Discount;
+    }
+    else {
+        return PassengerType::Adult;
+    }
+}
+
+std::string passengerTypeToString(PassengerType type) {
+    switch (type) {
+    case PassengerType::Adult:
+        return "Adult";
+    case PassengerType::Child:
+        return "Child";
+    case PassengerType::Discount:
+        return "Discount";
+    default:
+        return "Unknown";
+    }
+}
+
+
+std::vector<PassengerType> generateRandomPassengerTypes(int numPassengers) {
+    std::vector<PassengerType> passengerTypes;
+
+    // Инициализируем генератор случайных чисел
+    srand(static_cast<unsigned int>(time(nullptr)));
+
+    for (int i = 0; i < numPassengers; ++i) {
+        // Генерируем случайное число в диапазоне от 0 до 2
+        int randomIndex = rand() % 3;
+        // Преобразуем полученное случайное число в PassengerType и добавляем в вектор
+        passengerTypes.push_back(static_cast<PassengerType>(randomIndex));
+    }
+
+    return passengerTypes;
+}
+
+
+// Abstract class Passenger
+
+class Passenger
+{
+public:
+    virtual void info() = 0;
+    virtual void getCategory() = 0;
+    virtual ~Passenger() = default;
+};
+    
+// Concrete class BusPassenger 
+class BusPassenger : public Passenger
 {
 private:
-    string category;
+    PassengerType type;
 public:
-    void info() {
-        cout << "Board Taxi Driver\n" << endl;
+    BusPassenger(PassengerType type) : type(type) {}
+    void info() override {
+        std::cout << "Board Bus Driver\n" << std::endl;
     };
-    BusPassenger(string category) : category(category) {};
-    void getCategory() {
-        if (category == "Adult")
-            std::cout << "Correct category. 3$\n";
-        else if (category == "Child") 
-            std::cout << "Correct category. 2$\n";
-        else if (category == "Discount")
-            std::cout << "Correct category. 1$\n";
-        else
+    void getCategory() override {
+        switch (type) {
+        case PassengerType::Adult:
+            std::cout << "Correct category: " << passengerTypeToString(type) << " 3$\n";
+            break;
+        case PassengerType::Child:
+            std::cout << "Correct category: " << passengerTypeToString(type) << " 2$\n";
+            break;
+        case PassengerType::Discount:
+            std::cout << "Correct category: " << passengerTypeToString(type) << " 1$\n";
+            break;
+        default:
             std::cout << "Incorrect category! Not paid.\n";
-    }
-};
-
-
-// Class TaxiPassenger
-class TaxiPassenger
-{
-private:
-    string category;
-public:
-    void info() {
-        cout << "Board Taxi Driver\n" << endl;
-    };
-    TaxiPassenger(string category) : category(category) {};
-    void getCategory() {
-        if (category == "Adult")
-            std::cout << "Correct category. 10$\n";
-        else if (category == "Child") 
-            std::cout << "Correct category. 5$\n";
-        else
-            std::cout << "Incorrect category! Not paid.\n";
-    }
-};
-
-
-// Class BusDriver
-class BusDriver
-{
-private:
-    string license = "D";
-public:
-    void info() {
-        cout << "Board Bus Driver\n" << endl;
-    }
-    string getLicense() {
-        return license;
-    }
-};
-
-
-// Class TaxiDriver
-class TaxiDriver
-{
-private:
-    string license = "D";
-public:
-    void info() {
-        cout << "Board Taxi Driver\n" << endl;
-    }
-    string getLicense() {
-        return license;
-    }
-};
-
-
-// Class Bus
-class Bus
-{
-private:
-    BusDriver* driver;
-    vector<BusPassenger*> vectorPassenger;
-public:
-    Bus() : driver(nullptr) {};
-    void addDriver(BusDriver* driver) {
-        if (this->driver == nullptr) {
-            this->driver = driver;
-            std::cout << "Driver added\n";
+            break;
         }
-        else
-            std::cout << "Driver already added!\n";
     }
-    void addPassenger(BusPassenger* passenger) {
-        vectorPassenger.push_back(passenger);
-        std::cout << "Passenger added\n";
+};
+
+
+
+// Concrete class TaxiPassenger
+class TaxiPassenger : public Passenger
+{
+private:
+    PassengerType type;
+public:
+    TaxiPassenger(PassengerType type) : type(type) {}
+    void info() override {
+        std::cout << "Board Taxi Driver\n" << std::endl;
+    };
+    void getCategory() override {
+        switch (type) {
+        case PassengerType::Adult:
+            std::cout << "Correct category: " << passengerTypeToString(type) << " 10$\n";
+            break;
+        case PassengerType::Child:
+            std::cout << "Correct category: " << passengerTypeToString(type) << " 5$\n";
+            break;
+        default:
+            std::cout << "Incorrect category! Not paid.\n";
+            break;
+        }
     }
-    void isReadyToDepart() {
-        if (driver != nullptr && vectorPassenger.size() > 0 && vectorPassenger.size() <= 30)
-            cout << "Bus is ready to depart!\n";
-        else
-            cout << "Bus is not ready to depart!\n";
+};
+
+
+// Abstract class Driver
+class Driver
+{
+public:
+    virtual void info() = 0;
+    virtual std::string getLicense() = 0;
+    virtual ~Driver() = default;
+};
+
+// Concrete class BusDriver
+class BusDriver : public Driver
+{
+private:
+    std::string license = "D";
+public:
+    void info() override {
+        std::cout << "Bus Driver\n" << std::endl;
     }
-    ~Bus() {
+    std::string getLicense() override {
+        return license;
+    }
+};
+
+
+// Concrete class TaxiDriver
+class TaxiDriver : public Driver
+{
+private:
+    std::string license = "D";
+public:
+    void info() override {
+        std::cout << "Taxi Driver\n" << std::endl;
+    }
+    std::string getLicense() override {
+        return license;
+    }
+};
+
+
+// Abstract class Vehicle
+class Vehicle
+{
+protected:
+    Driver* driver;
+    std::vector<Passenger*> passengers;
+public:
+    Vehicle() : driver(nullptr) {}
+    virtual void isReadyToDepart() = 0;
+    virtual ~Vehicle() {
         delete driver;
-        for (auto passenger : vectorPassenger)
+        for (auto passenger : passengers)
             delete passenger;
     }
-};
-
-// Class Taxi
-class Taxi
-{
-private:
-    TaxiDriver* driver;
-    vector<TaxiPassenger*> vectorPassenger;
-public:
-    Taxi() : driver(nullptr) {};
-    void addDriver(TaxiDriver* driver) {
+    void addDriver(Driver* driver) {
         if (this->driver == nullptr) {
             this->driver = driver;
             std::cout << "Driver added\n";
-
         }
         else
             std::cout << "Driver already added!\n";
     }
-    void addPassenger(TaxiPassenger* passenger) {
-        vectorPassenger.push_back(passenger);
+    void addPassenger(Passenger* passenger) {
+        passengers.push_back(passenger);
+        passenger->getCategory();
         std::cout << "Passenger added\n";
-    }
-    void isReadyToDepart() {
-        if (driver != nullptr && vectorPassenger.size() > 0 && vectorPassenger.size() <= 4)
-            cout << "Taxi is ready to depart!\n";
-        else
-            cout << "Taxi is not ready to depart!\n";
     }
 };
 
 
+// Abstracxt class Bus
+class Bus : public Vehicle
+{
+public:
+    void isReadyToDepart() override {
+        if (driver != nullptr && passengers.size() > 0 && passengers.size() <= 30)
+            std::cout << "Bus is ready to depart!\n";
+        else
+            std::cout << "Bus is not ready to depart!\n";
+    }
+};
+
+// Abstracxt class Taxi
+class Taxi: public Vehicle
+{
+public:
+    void isReadyToDepart() override {
+        if (driver != nullptr && passengers.size() > 0 && passengers.size() <= 4)
+            std::cout << "Taxi is ready to depart!\n";
+        else
+            std::cout << "Taxi is not ready to depart!\n";
+    }
+};
+
+
+// Abstract class Builder
+class Builder
+{
+public:
+    virtual void buildDriver() = 0;
+    virtual void buildPassenger(PassengerType type) = 0;
+    virtual Vehicle* getVehicle() = 0;
+    virtual ~Builder() = default;
+};
+
 // Concrete class TaxiBuilder
-class TaxiBuilder
+class TaxiBuilder: public Builder
 {
 private:
     Taxi* taxi;
 public:
     TaxiBuilder() : taxi(nullptr) {}
-    TaxiDriver* createDriver() {
-        return new TaxiDriver(); 
+    //Driver* buildDriver() override {
+    void buildDriver() override {
+        if (taxi == nullptr) {
+            taxi = new Taxi();
+        }
+        taxi->addDriver(new TaxiDriver());
     }
-    TaxiPassenger* createPassenger(string category) {
-        return new TaxiPassenger(category); 
+    //Passenger* buildPassenger(std::string category) override {
+    void buildPassenger(PassengerType type) override {
+        if (taxi == nullptr) {
+            taxi = new Taxi();
+        }
+        taxi->addPassenger(new TaxiPassenger(type));
     };
-    Taxi* getVehicle()  {
+    Vehicle* getVehicle() override {
         if (taxi == nullptr)
             taxi = new Taxi();
         return taxi;
@@ -162,56 +260,55 @@ public:
 
 
 // Concrete class BusBuilder
-class BusBuilder
+class BusBuilder: public Builder
 {
 private:
     Bus* bus;
 public:
     BusBuilder() : bus(nullptr) {}
-    BusDriver* createDriver() {
-        return new BusDriver();
+    //Driver* buildDriver() override {
+    void buildDriver() override {
+        if (bus == nullptr) {
+            bus = new Bus();
+        }
+        bus->addDriver(new BusDriver());
     }
-    BusPassenger* createPassenger(string category) {
-        return new BusPassenger(category);
+    //Passenger* buildPassenger(std::string category) override {
+    void buildPassenger(PassengerType type) override {
+        if (bus == nullptr) {
+            bus = new Bus();
+        }
+        bus->addPassenger(new BusPassenger(type));
     };
-    Bus* getVehicle() {
+    Vehicle* getVehicle() override {
         if (bus == nullptr)
             bus = new Bus();
         return bus;
     }
-};
+    };
 
 
 // Class  Director
 class Director
 {
 public:
-    Bus* createVehicle(BusBuilder& builder, vector<string> passengerCategories)
+    Vehicle* makeVehicle(Builder& builder, std::vector<PassengerType> passengerCategories)
     {
-        Bus* vehicle = builder.getVehicle();
-        BusDriver* driver = builder.createDriver();
-        vehicle->addDriver(driver);
-        for (auto category : passengerCategories) {
-            BusPassenger* passenger = builder.createPassenger(category);
-            vehicle->addPassenger(passenger);
+        //Vehicle* vehicle = builder.getVehicle();
+        // Create.childseat
+        builder.buildDriver();
+        //vehicle->addDriver(driver); // Убрать в Builder
+        for (const auto& type : passengerCategories) {
+            //Passenger* passenger = builder.buildPassenger(category);
+            //vehicle->addPassenger(passenger); // Убрать в Builder
+            builder.buildPassenger(type);
         }
+        Vehicle* vehicle = builder.getVehicle();
         vehicle->isReadyToDepart();
-        return vehicle;
-    }
-    Taxi* createVehicle(TaxiBuilder& builder, vector<string> passengerCategories)
-    {
-        Taxi* vehicle = builder.getVehicle();
-        TaxiDriver* driver = builder.createDriver();
-        vehicle->addDriver(driver);
-        for (auto category : passengerCategories) {
-            TaxiPassenger* passenger = builder.createPassenger(category);
-            vehicle->addPassenger(passenger);
-        }
-        vehicle->isReadyToDepart();
+       
         return vehicle;
     }
 };
-
 
 
 int main()
@@ -220,41 +317,45 @@ int main()
 
     // Build Bus
     std::cout << "Bus:\n";
+    BusBuilder busBuilder;
 
-    BusBuilder bus_builder1;
-    vector<string> busPassengerCategories12 = { "Adult", "Child", "Discount", "Adult", "Child", "Child", "Adult", "Child", "Discount", "Adult", "Child", "Child" };
-    Bus* bus1 = dir.createVehicle(bus_builder1, busPassengerCategories12);
+    //std::vector<PassengerType> busPassengerCategories12 = { "Adult", "Child", "Discount", "Adult", "Child", "Child", "Adult", "Child", "Discount", "Adult", "Child", "Child" };
+    std::vector<PassengerType> busPassengerTypes12 = generateRandomPassengerTypes(12);
+    Vehicle* bus = dir.makeVehicle(busBuilder, busPassengerTypes12);
 
     // Trying add second Driver
-    //BusDriver* secondDriver = bus_builder1.createDriver();
+    //BusDriver* secondDriver = bus_builder1.buildDriver();
     //bus1->addDriver(secondDriver);  
 
-    delete bus1;
+    delete bus;
 
+    BusBuilder busBuilder36;
     // Build Bus with 36 Passengers
-    BusBuilder bus_builder2;
-    vector<string> busPassengerCategories36 = { "Adult", "Child", "Discount", "Adult", "Child", "Child", "Adult", "Child", "Discount", "Adult", "Child", "Child", "Adult", "Child", "Discount", "Adult", "Child", "Child", "Adult", "Child", "Discount", "Adult", "Child", "Child", "Adult", "Child", "Discount", "Adult", "Child", "Child", "Adult", "Child", "Discount", "Adult", "Child", "Child" };
-    Bus* bus2 = dir.createVehicle(bus_builder2, busPassengerCategories36);
+    //std::vector<PassengerType> busPassengerCategories36 = { "Adult", "Child", "Discount", "Adult", "Child", "Child", "Adult", "Child", "Discount", "Adult", "Child", "Child", "Adult", "Child", "Discount", "Adult", "Child", "Child", "Adult", "Child", "Discount", "Adult", "Child", "Child", "Adult", "Child", "Discount", "Adult", "Child", "Child", "Adult", "Child", "Discount", "Adult", "Child", "Child" };
+    std::vector<PassengerType> busPassengerTypes36 = generateRandomPassengerTypes(12);
+    Vehicle* bus36 = dir.makeVehicle(busBuilder36, busPassengerTypes36);
 
-    delete bus2;
+    delete bus36;
 
   
     // Build Taxi
     std::cout << "\nTaxi:\n";
 
-    TaxiBuilder taxi_Builder1;
-    vector<string> taxiPassengerCategories4 = { "Adult", "Child", "Child", "Child" };
-    Taxi* taxi1 = dir.createVehicle(taxi_Builder1, taxiPassengerCategories4);
-
-    delete taxi1;
+    TaxiBuilder taxiBuilder;
+    //std::vector<PassengerType> taxiPassengerCategories4 = { "Adult", "Child", "Child", "Child" };
+    std::vector<PassengerType> taxiPassengerTypes4 = generateRandomPassengerTypes(12);
+    Vehicle* taxi = dir.makeVehicle(taxiBuilder, taxiPassengerTypes4);
+    delete taxi;
 
     // Build Taxid with 5 Passengers
-    TaxiBuilder taxi_Builder2;
-    vector<string> taxiPassengerCategories5 = { "Adult", "Child", "Child", "Child", "Adult" };
-    Taxi* taxi2 = dir.createVehicle(taxi_Builder2, taxiPassengerCategories5);
+    TaxiBuilder taxiBuilder5;
+    //std::vector<PassengerType> taxiPassengerCategories5 = { "Adult", "Child", "Child", "Child", "Adult" };
+    std::vector<PassengerType> taxiPassengerTypes5 = generateRandomPassengerTypes(12);
+    Vehicle* taxi5 = dir.makeVehicle(taxiBuilder5, taxiPassengerTypes5);
 
-    delete taxi2;
+    delete taxi5;
 
     return 0;
 }
 
+//  Добавить абстраактный Vehichle, Builder, 

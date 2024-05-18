@@ -88,7 +88,7 @@ int main() {
     department.createReport();
 
     // Преподаватель не создал отчет вовремя
-    // department.createReport();
+     department.createReport();
 
     // Преподаватель создает отчет снова
     // department.createReport();
@@ -116,3 +116,6 @@ int main() {
 //| +createReport()                |
 //| +isReportAvailable() : bool |
 //------------------ |
+
+
+// Добавить реализацию невовромя сдачи отчёта, добавить в UML факультеты

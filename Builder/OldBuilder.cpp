@@ -126,8 +126,8 @@ public:
 // Абстрактный класс Строитель транспортного средства
 class VehicleBuilder {
 public:
-    virtual Driver* createDriver() = 0;
-    virtual Passenger* createPassenger(string category) = 0;
+    virtual Driver* buildDriver() = 0;
+    virtual Passenger* buildPassenger(string category) = 0;
     virtual Vehicle* getVehicle() = 0;
     virtual ~VehicleBuilder() {}
 };
@@ -138,10 +138,10 @@ private:
     Bus* bus;
 public:
     BusBuilder() : bus(nullptr) {}
-    Driver* createDriver() override {
+    Driver* buildDriver() override {
         return new BusDriver();
     }
-    Passenger* createPassenger(string category) override {
+    Passenger* buildPassenger(string category) override {
         return new BusPassenger(category);
     }
     Vehicle* getVehicle() override {
@@ -157,10 +157,10 @@ private:
     Taxi* taxi;
 public:
     TaxiBuilder() : taxi(nullptr) {}
-    Driver* createDriver() override {
+    Driver* buildDriver() override {
         return new TaxiDriver();
     }
-    Passenger* createPassenger(string category) override {
+    Passenger* buildPassenger(string category) override {
         return new TaxiPassenger(category);
     }
     Vehicle* getVehicle() override {
@@ -175,12 +175,12 @@ public:
 // Класс Директор
 class Director {
 public:
-    Vehicle* createVehicle(VehicleBuilder& builder, vector<string> passengerCategories) {
+    Vehicle* makeVehicle(VehicleBuilder& builder, vector<string> passengerCategories) {
         Vehicle* vehicle = builder.getVehicle();
-        Driver* driver = builder.createDriver();
+        Driver* driver = builder.buildDriver();
         vehicle->addDriver(driver);
         for (auto category : passengerCategories) {
-            Passenger* passenger = builder.createPassenger(category);
+            Passenger* passenger = builder.buildPassenger(category);
             vehicle->addPassenger(passenger);
         }
         return vehicle;
@@ -193,7 +193,7 @@ int main() {
     // Создаем автобус
     BusBuilder busBuilder;
     vector<string> busPassengerCategories = { "Adult", "Child", "Discount", "Adult", "Child", "Child" };
-    Vehicle* bus = dir.createVehicle(busBuilder, busPassengerCategories);
+    Vehicle* bus = dir.makeVehicle(busBuilder, busPassengerCategories);
     if (bus->isReadyToDepart())
         cout << "Bus is ready to depart!" << endl;
     else
@@ -204,7 +204,7 @@ int main() {
     // Создаем такси
     TaxiBuilder taxiBuilder;
     vector<string> taxiPassengerCategories = { "Adult", "Child", "Child", "Child" };
-    Vehicle* taxi = dir.createVehicle(taxiBuilder, taxiPassengerCategories);
+    Vehicle* taxi = dir.makeVehicle(taxiBuilder, taxiPassengerCategories);
     if (taxi->isReadyToDepart())
         cout << "Taxi is ready to depart!" << endl;
     else
