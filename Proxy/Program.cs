@@ -35,8 +35,9 @@ class RealImage : IImage
 // Прокси для изображения
 class ImageProxy : IImage
 {
-    private RealImage _realImage;
     private string _fileName;
+    private Image _image;
+    private bool _imageLoaded = false; // Флаг для отслеживания загрузки изображения
 
     public ImageProxy(string fileName)
     {
@@ -45,22 +46,28 @@ class ImageProxy : IImage
 
     public void Draw(Graphics g, Rectangle box)
     {
-        if (_realImage == null)
+        if (_imageLoaded)
         {
-            _realImage = new RealImage(_fileName);
+            g.DrawImage(_image, box);
         }
-        _realImage.Draw(g, box);
+        else
+        {
+            using (Brush brush = new SolidBrush(Color.Black))
+            {
+                g.FillRectangle(brush, box);
+            }
+        }
     }
 
     public void LoadImage(string fileName)
     {
         _fileName = fileName;
-        if (_realImage != null)
-        {
-            _realImage.LoadImage(fileName);
-        }
+        _image = Image.FromFile(fileName);
+        _imageLoaded = true; // Устанавливаем флаг, чтобы показать, что изображение загружено
     }
 }
+
+
 
 // Форма для отображения и перемещения изображения
 class MainForm : Form
@@ -79,7 +86,7 @@ class MainForm : Form
 
     private void MainForm_Paint(object sender, PaintEventArgs e)
     {
-        Rectangle box = new Rectangle(_boxPosition.X, _boxPosition.Y, 200, 200);
+        Rectangle box = new Rectangle(_boxPosition.X, _boxPosition.Y, 100, 100);
         _imageProxy.Draw(e.Graphics, box);
     }
 
@@ -110,6 +117,7 @@ class MainForm : Form
 // Входная точка приложения
 class Program
 {
+    [STAThread]
     static void Main(string[] args)
     {
         Application.EnableVisualStyles();
@@ -117,6 +125,7 @@ class Program
         Application.Run(new MainForm());
     }
 }
+
 /*
  ----------------------       -----------------        ----------------       ----------------------
 |        MainForm       |     |      IImage     |      |    RealImage   |     |    ImageProxy   |
@@ -129,3 +138,5 @@ class Program
  ----------------------*/
 
 // Добавить Proxy при пераом запуске
+
+// При первом запуске есть Proxy, для подключения картинки два раза кликунать рпавой конпкой мыши по форме

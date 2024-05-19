@@ -6,7 +6,9 @@
 class Observer {
 public:
     virtual void update(bool reportCreated) = 0;
+    virtual void deadlineMissed() = 0; // Новый метод для уведомления о пропущенном дедлайне
 };
+
 
 // Абстрактный класс предмета (Subject)
 class Subject {
@@ -44,15 +46,27 @@ public:
         }
     }
 
+    void notifyDeadlineMissed() {
+        for (Observer* observer : observers) {
+            observer->deadlineMissed();
+        }
+    }
+
     void createReport() {
         isReportCreated = true;
         notify();
+    }
+
+    void missedDeadline() {
+        isReportCreated = false; // Считаем, что отчет не был создан вовремя
+        notifyDeadlineMissed();
     }
 
     bool isReportAvailable() {
         return isReportCreated;
     }
 };
+
 
 // Конкретный класс наблюдателя (ConcreteObserver)
 class Faculty : public Observer {
@@ -69,6 +83,10 @@ public:
         else {
             std::cout << "Report is available. Faculty: " << name << " can access the report.\n";
         }
+    }
+
+    void deadlineMissed() override {
+        std::cout << "Deadline missed! Faculty: " << name << " should be notified about the missed deadline.\n";
     }
 };
 
@@ -87,14 +105,37 @@ int main() {
     // Преподаватель создает отчет
     department.createReport();
 
-    // Преподаватель не создал отчет вовремя
-     department.createReport();
-
-    // Преподаватель создает отчет снова
-    // department.createReport();
+    // Уведомляем о пропущенном дедлайне
+    department.missedDeadline();
 
     return 0;
 }
+
+
+
+//int main() {
+//    // Создаем деканат (предмет)
+//    Department department;
+//
+//    // Создаем факультеты (наблюдателей)
+//    Faculty faculty1("Faculty of Computer Science");
+//    Faculty faculty2("Faculty of Mathematics");
+//
+//    // Подписываем факультеты на уведомления от деканата
+//    department.attach(&faculty1);
+//    department.attach(&faculty2);
+//
+//    // Преподаватель создает отчет
+//    department.createReport();
+//
+//    // Преподаватель не создал отчет вовремя
+//     department.createReport();
+//
+//    // Преподаватель создает отчет снова
+//    // department.createReport();
+//
+//    return 0;
+//}
 
 //------------------------       ---------------------- -
 //| Subject         |     |        Observer |
