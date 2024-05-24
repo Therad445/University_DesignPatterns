@@ -6,6 +6,8 @@
 
 int main() {
     setlocale(LC_ALL, "Russian");
+
+
     // Создание фабрик юнитов
     ElfFactory elfFactory;
     OrcFactory orcFactory;

@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+//#include "GameMap.h"
 
 // Базовый класс юнита
 class Unit {
@@ -14,6 +15,8 @@ protected:
     int defensePower;
     int attackBonus;
     int defenseBonus;
+    int x;
+    int y;
 
 public:
     Unit(const std::string& name, int health, int attackPower, int defensePower);
@@ -27,6 +30,7 @@ public:
     void applyAttackBonus(int bonus);
     void applyDefenseBonus(int bonus);
     void resetBonuses();
+    //void move(int newX, int newY, GameMap& gameMap);
 };
 
 // Конкретный класс юнита Elf

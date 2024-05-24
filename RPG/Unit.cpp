@@ -39,6 +39,18 @@ void Unit::resetBonuses() {
     defenseBonus = 0;
 }
 
+//void Unit::move(int newX, int newY, GameMap& gameMap) {
+//    if (gameMap.isValidMove(newX, newY)) {
+//        gameMap.moveUnit(x, y, newX, newY, name[0]); // Использование нового метода для перемещения юнита
+//        x = newX;
+//        y = newY;
+//    }
+//    else {
+//        std::cout << "Недопустимый ход!\n";
+//    }
+//}
+
+
 // Реализация методов Elf
 Elf::Elf(const std::string& name) : Unit("Elf: " + name, 100, 15, 5) {}
 
