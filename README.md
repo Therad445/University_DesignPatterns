@@ -20,10 +20,14 @@ My practice in developing Design Patterns from the "Gang of Four" book "Pattern 
 * Lab6 - Observer
 ![image](https://github.com/Therad445/University_DesignPatterns/assets/59477654/0dea7146-9dec-4d91-948c-82207c149f12)
 
+* Lab7, 8 - RPG Game
+![image](https://github.com/Therad445/University_DesignPatterns/assets/59477654/3db718c8-f32c-4c80-b990-a8d37032ee24)
+
 # Authors
 * Islamov Radmir
 
 # Resourses
 * "Pattern Design: Elements of Reusable Object-Oriented Software" by Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides "Gang of Four"
 * [MIET_Labs1-6.pdf](MIET_Labs1-6.pdf)
+* [MIET_Labs7-8.pdf](MIET_Labs7-8.pdf)
 * [README.md](README.md)
